@@ -1,20 +1,43 @@
-import { $proseAsync } from '@milkdown/utils'
+import { $ctx, $proseAsync } from '@milkdown/utils'
 import { findChildren } from '@milkdown/prose'
 import { Plugin, PluginKey } from '@milkdown/prose/state'
+import type { MilkdownPlugin } from '@milkdown/ctx'
+import type { BundledLanguage } from 'shikiji'
+import type { BundledTheme } from 'shikiji/themes'
 import { getHighlighter } from 'shikiji'
 import { getDecorations } from './get-decorations'
 
-export const shiki = $proseAsync(async () => {
+export interface ShikiConfigOptions {
+  themes: {
+    light: BundledTheme
+    dark: BundledTheme
+  }
+  langs: BundledLanguage[]
+  dark: boolean
+}
+
+// shikiji/themes：BundledTheme
+// shikiji/langs: BundledLanguage
+export const shikiConfig = $ctx<ShikiConfigOptions, 'shikiConfig'>({
+  themes: { light: 'github-light', dark: 'github-dark' },
+  langs: ['bash', 'c', 'css', 'go', 'html', 'java', 'javascript', 'js', 'json', 'markdown', 'php', 'python', 'sql', 'sh', 'rust'],
+  dark: false,
+}, 'shikiConfig')
+
+export const shikiPlugin = $proseAsync(async (ctx) => {
+  const { langs, themes, dark } = ctx.get(shikiConfig.key)
+  const theme: BundledTheme = (dark ? themes.dark : themes.light) as BundledTheme
+  const name: string = 'code_block'
+
   const highlighter = await getHighlighter({
-    themes: ['night-owl'],
-    langs: ['javascript', 'tsx', 'markdown', 'php'],
+    langs,
+    themes: Object.values(themes),
   })
-  const name = 'code_block'
 
   return new Plugin({
     key: new PluginKey('MILKDOWN_SHIKI'),
     state: {
-      init: (_, { doc }) => getDecorations(doc, name, highlighter),
+      init: (_, { doc }) => getDecorations(doc, name, highlighter, theme),
       apply: (transaction, decorationSet, oldState, state) => {
         const isNodeName = state.selection.$head.parent.type.name === name
         const isPreviousNodeName = oldState.selection.$head.parent.type.name === name
@@ -37,7 +60,7 @@ export const shiki = $proseAsync(async () => {
           }))
 
         if (codeBlockChanged)
-          return getDecorations(transaction.doc, name, highlighter)
+          return getDecorations(transaction.doc, name, highlighter, theme)
 
         return decorationSet.map(transaction.mapping, transaction.doc)
       },
@@ -49,3 +72,5 @@ export const shiki = $proseAsync(async () => {
     },
   })
 })
+
+export const shiki: MilkdownPlugin[] = [shikiPlugin, shikiConfig]
