@@ -1,12 +1,28 @@
 {
-  "name": "milkdown-plugin-shiki",
-  "private": true,
-  "version": "0.0.0",
+  "name": "@s2nc/milkdown-plugin-shiki",
+  "version": "0.1.0",
+  "description": "shiki plugin for milkdown.",
+  "keywords": [
+    "milkdown",
+    "milkdown plugin",
+    "shiki",
+    "shikiji"
+  ],
+  "author": "jiannei",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jiannei/milkdown-plugin-shiki"
+  },
+  "license": "MIT",
+  "main": "lib/index.js",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-    "preview": "vite preview"
+    "tsc": "tsc --noEmit && echo",
+    "preview": "vite preview",
+    "lint": "eslint ./src",
+    "lint:fix": "eslint ./src --fix"
   },
   "devDependencies": {
     "@antfu/eslint-config": "^2.6.2",

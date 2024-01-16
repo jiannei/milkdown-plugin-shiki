@@ -5,13 +5,16 @@
     "module": "ESNext",
     "lib": ["ES2020", "DOM", "DOM.Iterable"],
     "skipLibCheck": true,
+    "rootDir": "src",
+    "outDir": "lib",
 
     /* Bundler mode */
     "moduleResolution": "bundler",
-    "allowImportingTsExtensions": true,
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "noEmit": true,
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true,
 
     /* Linting */
     "strict": true,

@@ -52,7 +52,7 @@ function getDecorations(doc: Node, name: string, highlighter: Highlighter) {
   return DecorationSet.create(doc, decorations)
 }
 
-export const milkShiki = $proseAsync(async () => {
+export const shiki = $proseAsync(async () => {
   const highlighter = await getHighlighter({
     themes: ['night-owl'],
     langs: ['javascript', 'tsx', 'markdown', 'php'],
