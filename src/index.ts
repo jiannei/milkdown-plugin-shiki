@@ -1,9 +1,8 @@
 import { $ctx, $proseAsync } from '@milkdown/utils'
 import { findChildren } from '@milkdown/prose'
 import { Plugin, PluginKey } from '@milkdown/prose/state'
-import type { MilkdownPlugin } from '@milkdown/ctx'
-import type { BundledLanguage } from 'shikiji'
-import type { BundledTheme } from 'shikiji/themes'
+import type { Ctx, MilkdownPlugin } from '@milkdown/ctx'
+import type { BundledLanguage, BundledTheme } from 'shikiji'
 import { getHighlighter } from 'shikiji'
 import { getDecorations } from './get-decorations'
 
@@ -20,11 +19,11 @@ export interface ShikiConfigOptions {
 // shikiji/langs: BundledLanguage
 export const shikiConfig = $ctx<ShikiConfigOptions, 'shikiConfig'>({
   themes: { light: 'github-light', dark: 'github-dark' },
-  langs: ['bash', 'c', 'css', 'go', 'html', 'java', 'javascript', 'js', 'json', 'markdown', 'php', 'python', 'sql', 'sh', 'rust'],
+  langs: ['bash', 'c', 'css', 'html', 'java', 'javascript', 'js', 'json', 'markdown', 'php', 'python', 'sql', 'sh'],
   dark: false,
 }, 'shikiConfig')
 
-export const shikiPlugin = $proseAsync(async (ctx) => {
+export const shikiPlugin = $proseAsync(async (ctx: Ctx) => {
   const { langs, themes, dark } = ctx.get(shikiConfig.key)
   const theme: BundledTheme = (dark ? themes.dark : themes.light) as BundledTheme
   const name: string = 'code_block'

@@ -1,8 +1,7 @@
 import type { Node } from '@milkdown/prose/model'
-import type { Highlighter } from 'shikiji'
+import type { BundledTheme, Highlighter } from 'shikiji'
 import { Decoration, DecorationSet } from '@milkdown/prose/view'
 import { findChildren } from '@milkdown/prose'
-import type { BundledTheme } from 'shikiji/themes'
 
 export interface FlattedNode {
   content: string
